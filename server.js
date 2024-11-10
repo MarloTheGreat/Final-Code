@@ -156,7 +156,7 @@ app.post('/forgot-password', async (req, res) => {
     }
 
     const resetToken = Math.random().toString(36).substring(2, 15); // Generate a simple token
-    const resetUrl = `http://localhost:3000/reset-password.html`;
+    const resetUrl = `http://localhost:${PORT}/reset-password.html`;
 
     // Store token temporarily in the database for validation
     await usersCollection.updateOne({ _id: user._id }, { $set: { resetToken: resetToken } });
