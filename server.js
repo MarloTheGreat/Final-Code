@@ -57,6 +57,7 @@ const loginLimiter = rateLimit({
 
 // Sign-up route
 app.post('/signup', async (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'signup.html'));
     const { email, password } = req.body;
 
     if (!email || !password) {
