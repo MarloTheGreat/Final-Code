@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeVerse</title>
+    <!-- Add a new anime-inspired font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Zilla+Slab:wght@500&display=swap" rel="stylesheet">
+    <style>
+        /* Reset default styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            
+            font-family: 'Zilla Slab', serif;
+            background: linear-gradient(135deg, #121212 ,#ff6f61 ); /* Ombre effect from red to black */
+            color: #fff;
+            background-attachment: fixed;
+        }
+
+
+        /* Side Menu Button */
+        .menu-button {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            background-color: #ff6f61;
+            color: white;
+            padding-top: 14px;
+            padding-bottom: 18px;
+            padding-right: 18px;
+            padding-left: 18px;
+            font-size: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-button:hover {
+            background-color: #e04d45;
+        }
+
+        /* Side Menu */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            padding-top: 60px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .side-menu.active {
+            left: 0;
+        }
+
+        .side-menu a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 20px;
+            color: white;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        .side-menu a:hover {
+            background-color: #ff6f61;
+        }
+
+        .side-menu-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .menu-button:hover {
+            background-color: #e04d45;
+        }
+
+        .dashboard {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ff6f61;
+            font-family: 'Press Start 2P', cursive;
+            font-weight: bold;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8);
+            letter-spacing: 2px;
+        }
+
+        /* Genre buttons */
+        .genres {
+            margin: 20px 0;
+        }
+
+        .genres button {
+            margin: 5px;
+            padding: 12px 20px;
+            background-color: #ff6f61;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .genres button:hover {
+            background-color: #e04d45;
+            transform: scale(1.1);
+        }
+
+        .anime-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .anime-card {
+            position: relative;
+            width: 200px;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: white;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .anime-card:hover {
+            transform: scale(1.05);
+            background-color: #444;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .anime-card img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .anime-card h3 {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #fff;
+        }
+
+        /* Play Button Styling */
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            color: rgba(255, 111, 97, 0.8); /* Semi-transparent red hint */
+            background-color: rgba(255, 111, 97, 0.2); /* Light red background */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .anime-card:hover .play-button {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1); /* Slightly enlarge on hover */
+        }
+
+        /* Anime Details Modal */
+        .anime-details {
+            position: absolute;  /* Change from fixed to absolute */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center it on the page */
+            width: 80%;
+            max-width: 2000px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(246, 5, 5, 0.463);
+            z-index: 1000;
+            overflow-y: auto; /* Make it scrollable */
+            max-height: 2000%;  /* Limit the height to 80% of the viewport */
+            display: none; /* Hide by default */
+        }
+
+        .anime-details.visible {
+            opacity: 1;
+            visibility: visible;
+            display: block;
+        }
+
+        .anime-details button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff6f61;
+            border: none;
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .anime-details-content {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            overflow-y: auto;
+            max-height: 100%;
+        }
+
+        .anime-image-container {
+            margin: 20px 0;
+            position: relative;
+            display: flex; /* Flexbox to align description and image side by side */
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        .anime-image-container img {
+            width: 250px;
+            border-radius: 10px;
+        }
+
+        .anime-description {
+            text-align: left;
+            margin-top: 20px;
+            font-size: 20px;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Space between the two images */
+        }
+        .anime-description img {
+            width: 100%; /* Adjust the size of the secondary images */
+            max-width: 250px; /* You can adjust this size as needed */
+            object-fit: cover; /* Ensure the images maintain their aspect ratio */
+            border-radius: 8px; /* Optional: add rounded corners to the images */
+            margin-top: 10px;
+        }
+
+        /* Optional: Add hover effect for the images */
+        .anime-description img:hover {
+            transform: scale(1.05); /* Slight zoom effect */
+            transition: transform 0.3s ease;
+        }
+        
+        .anime-details h2 {
+            font-size: 36px;
+            color: #ff6f61;
+            margin-bottom: 20px;
+        }
+
+        #anime-img {
+        width: 100%; /* Make the main image responsive */
+        max-width: 200px; /* You can adjust this as needed */
+        margin-bottom: 20px; /* Space between the main image and secondary images */
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- Side Menu Button -->
+    <div class="menu-button" onclick="toggleMenu()">☰</div>
+
+    <!-- Side Menu -->
+    <div class="side-menu" id="sideMenu">
+        <span class="side-menu-close" onclick="toggleMenu()">×</span>
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <a href="#" id="logout">Logout</a> <!-- Added ID for easy selection -->
+    </div>
+
+    <div class="dashboard">
+        <h1>AnimeVerse</h1>
+        <div class="genres">
+            <button onclick="displayAll()">All</button>
+            <button onclick="filterByGenre('Action')">Action</button>
+            <button onclick="filterByGenre('Adventure')">Adventure</button>
+            <button onclick="filterByGenre('Romance')">Romance</button>
+            <button onclick="filterByGenre('Fantasy')">Fantasy</button>
+            <button onclick="filterByGenre('Horror')">Horror</button>
+        </div>
+        <div id="anime-list" class="anime-list"></div>
+    </div>
+
+    <div id="anime-details" class="anime-details hidden">
+        <button onclick="closeDetails()">Close</button>
+        <div class="anime-details-content">
+            <h2 id="anime-title"></h2>
+            <div class="anime-image-container">
+                <img id="anime-img" src="" alt="Anime Image">
+            </div>
+            <div class="anime-description" id="anime-description"></div>
+        </div>
+    </div>
+
+    <script>
+        const menu = document.getElementById('sideMenu');
+        const animeList = document.getElementById('anime-list');
+        const animeDetails = document.getElementById('anime-details');
+        const animeTitle = document.getElementById('anime-title');
+        const animeImg = document.getElementById('anime-img'); // Main image
+        const animeDescription = document.getElementById('anime-description'); // Description with images
+
+        const animes = [
+            { title: "Attack on Titan", genre: "Action", description: "Humans battle giants to save their world.", episodes: 75, image: "images/aot.jpg", image2: "images/aot.gif", image3: "images/aot2.gif" },
+            { title: "One Piece", genre: "Adventure", description: "Pirates search for the legendary treasure One Piece.", episodes: 1000, image: "images/onepiece.jpg", image2: "images/one.gif", image3: "images/one2.gif" },
+            { title: "Your Lie in April", genre: "Romance", description: "A young pianist rediscovers music through love.", episodes: 22, image: "images/yourlie.jpg", image2: "images/lie.gif", image3: "images/lie2.gif" },
+            { title: "Sword Art Online", genre: "Fantasy", description: "Players are trapped in a virtual reality game.", episodes: 96, image: "images/sword.jpg", image2: "images/sot.gif", image3: "images/sot2.gif" },
+            { title: "Tokyo Ghoul", genre: "Horror", description: "A young man becomes half-ghoul and navigates a dark world.", episodes: 12, image: "images/tokyo.jpg", image2: "images/tokyo.gif", image3: "images/tokyo2.gif" },
+            { title: "My Hero Academia", genre: "Action", description: "Students at U.A. High School train to become heroes.", episodes: 88, image: "images/hero.jpg", image2: "images/hero.gif", image3: "images/hero2.gif" },
+            { title: "Naruto", genre: "Adventure", description: "A young ninja seeks recognition from his peers and dreams of becoming the Hokage.", episodes: 220, image: "images/naruto.jpg", image2: "images/naruto2.gif", image3: "images/naruto3.gif" },
+            { title: "Clannad", genre: "Romance", description: "A high school delinquent befriends a strange girl who transforms his life.", episodes: 23, image: "images/clannad.jpg", image2: "images/clannad2.gif", image3: "images/clannad3.gif" },
+            { title: "Re:Zero", genre: "Fantasy", description: "A boy is transported to a fantasy world, where he discovers his ability to 'Return by Death.'", episodes: 25, image: "images/rezero.jpg", image2: "images/rezero2.gif", image3: "images/rezero3.gif" },
+            { title: "Parasyte", genre: "Horror", description: "A high school student battles parasitic beings controlling human hosts.", episodes: 24, image: "images/parasyte.jpg", image2: "images/parasyte2.gif", image3: "images/parasyte3.gif" }
+        ];
+
+        // Handle logout
+        function handleLogout() {
+            window.location.href = '/login';  
+        }
+
+        // Toggle side menu visibility
+        function toggleMenu() {
+            menu.classList.toggle('active');
+        }
+
+        // Filter by genre
+        function filterByGenre(genre) {
+            const filteredAnimes = animes.filter(anime => anime.genre === genre);
+            displayAnimes(filteredAnimes);
+        }
+
+        // Display all animes
+        function displayAll() {
+            displayAnimes(animes);
+        }
+
+        // Display animes in the list
+        function displayAnimes(animes) {
+            animeList.innerHTML = '';
+            animes.forEach(anime => {
+                const animeCard = document.createElement('div');
+                animeCard.classList.add('anime-card');
+                animeCard.innerHTML = `
+                    <img src="${anime.image}" alt="${anime.title}">
+                    <h3>${anime.title}</h3>
+                    <div class="play-button">▶</div>
+                `;
+                animeCard.addEventListener('click', () => openDetails(anime));
+                animeList.appendChild(animeCard);
+            });
+        }
+
+        // Open anime details
+        function openDetails(anime) {
+            animeTitle.textContent = anime.title;
+            animeImg.src = anime.image;  // Display the main image
+            animeDescription.innerHTML = `${anime.description}<br><br><img src="${anime.image2}" alt="Second Image"><br><img src="${anime.image3}" alt="Third Image">`; 
+            animeDetails.classList.add('visible');
+
+            // Scroll to the top of the anime details section smoothly
+            animeDetails.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Close anime details
+        function closeDetails() {
+            animeDetails.classList.remove('visible');
+        }
+
+        // Initialize with all animes
+        displayAll();
+
+        document.getElementById('logout').addEventListener('click', handleLogout);
+
+        function handleLogout() {
+        // Redirect to the login page or clear session data
+        alert('Logging out...');
+        window.location.href = '/login.html'; // Change to the appropriate logout URL
+        }
+    </script>
+</body>
+</html>

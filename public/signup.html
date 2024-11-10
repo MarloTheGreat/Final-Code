@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Zilla+Slab:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file if you have one -->
+    <style>
+        body {
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            position: relative; /* Allow positioning of pseudo-element */
+            overflow: hidden; /* Prevents scrolling */
+            animation: fadeIn 1s ease-in-out; /* Animation on load */
+        }
+
+        /* Pseudo-element to add a background with reduced opacity */
+        body::before {
+            content: ''; /* Empty content for pseudo-element */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('images/omg5.gif'); /* Set the GIF as background */
+            background-size: cover; /* Ensures the image covers the entire body without distortion */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents repeating the background */
+            opacity: 1; /* Adjust this to control the opacity of the background image */
+            z-index: -1; /* Place it behind the form */
+            image-rendering: -webkit-optimize-contrast; /* Ensures high quality for GIF images in some browsers */
+            image-rendering: crisp-edges; /* Another option to enhance image quality */
+        }
+
+        /* The form itself will remain fully visible */
+        form {
+            position: relative;
+            z-index: 1; /* Ensure form is above the background */
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background for form */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            font-size: 80px;
+            margin-bottom: 20px;
+            color: #ff6f61;
+            font-family: 'Press Start 2P', cursive;
+            font-weight: bold;
+            text-shadow: 10px 10px 10px rgba(0, 0, 0, 0.8);
+            letter-spacing: 2px;
+        }
+ 
+         .form-container {
+             background-color: rgba(255, 255, 255, 0.375); /* Semi-transparent white */
+             padding: 10px;
+             border-radius: 10px;
+             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Stronger shadow to make it pop */
+             width: 300px; /* Fixed width for better alignment */
+             animation: popIn 0.5s ease-in-out; /* Animation for container */
+             text-align: center; /* Center text */
+             display: flex;
+             flex-direction: column;
+         }
+ 
+         @keyframes popIn {
+             from { transform: scale(0.95); opacity: 0; }
+             to { transform: scale(1); opacity: 1; }
+         }
+ 
+         h3 {
+             margin-bottom: 20px;
+             color: #333;
+         }
+ 
+         label {
+             display: block;
+             margin-bottom: 5px;
+             text-align: left;
+             color: #555;
+             font-weight: bold;
+         }
+ 
+         input {
+             width: 90%; /* Ensure the input fields are not full width but still take up most of the container */
+             padding: 10px;
+             margin: 10px 0;
+             border: 1px solid #ccc;
+             border-radius: 5px;
+             transition: border-color 0.3s; /* Smooth transition */
+         }
+ 
+         input:focus {
+             border-color: #28a745; /* Change border color on focus */
+             outline: none;
+         }
+ 
+         button {
+             padding: 10px;
+             border: none;
+             background-color: #920000;
+             color: white;
+             cursor: pointer;
+             border-radius: 5px;
+             width: 100%; /* Full width for the button */
+             transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+         }
+ 
+         button:hover {
+             background-color: #0080bb; /* Darker green on hover */
+             transform: scale(1.05); /* Slightly enlarge on hover */
+         }
+ 
+         /* Additional CSS for error messages and password toggle */
+         .error-message {
+             color: red;
+             font-size: 0.9em;
+             margin-top: 5px;
+         }
+ 
+         .footer {
+             margin-top: 15px;
+             font-size: 0.9em;
+             color: #555555;
+             font-weight: bold;
+         }
+ 
+         .footer a {
+             color: #bb8900f8; /* Green color for links */
+             text-decoration: none;
+         }
+ 
+         .footer a:hover {
+             text-decoration: underline; /* Underline on hover */
+         }
+     </style>
+</head>
+<body>
+    <h1>Animeverse</h1> <!-- The title centered at the top -->
+    <div class="form-container">
+        <form id="signupForm" action="/signup" method="post">
+            <h3>Sign Up</h3>
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" placeholder="example@123.com" >
+            <div id="emailError" class="error-message"></div>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" >
+            <div id="passwordError" class="error-message"></div>
+
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" >
+            <div id="confirmPasswordError" class="error-message"></div>
+
+            <button type="submit">Sign Up</button>
+            <div id="formError" class="error-message"></div>
+            <div class="footer">
+                <p>Already have an account? <a href="login.html">Log In</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+document.getElementById('signupForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    // Clear previous error messages
+    document.getElementById('formError').innerText = '';
+    document.getElementById('passwordError').innerText = '';
+    document.getElementById('confirmPasswordError').innerText = '';
+
+    // Basic validation
+    if (!email) {
+        const message = 'Email is required.';
+        formError.textContent = message;
+        // alert(message); // Alert for missing email
+        return;
+    }
+
+    // Check if the email is in a valid format
+    const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+    if (!emailPattern.test(email)) {
+        const message = 'Please enter a valid email address.';
+        formError.textContent = message;
+        // alert(message); // Alert for invalid email format
+        return;
+    }
+
+    // Check if either password or confirmPassword is empty
+    if (password === '' || confirmPassword === '')  {
+        const message = 'Password must not be empty.';
+        formError.textContent = message;
+        // alert(message); // Alert for missing email
+        return;
+    }
+
+    // Check if password has 7 characters
+    if (password.length < 7)  {
+        const message = 'Password must be at least 7 characters long.';
+        formError.textContent = message;
+        // alert(message); // Alert for missing email
+        return;
+    }
+
+    // Check if passwords match
+    if (password !== confirmPassword)  {
+        const message = 'Passwords do not match.';
+        formError.textContent = message;
+        // alert(message); // Alert for missing email
+        return;
+    }
+
+    // Proceed with signup if passwords match
+    const response = await fetch('/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    });
+
+    const result = await response.json();
+    if (result.success) {
+        window.location.href = 'login.html'; // Redirect to login page after successful signup
+    } else {
+        // alert(result.message);  // Display any error messages returned by the server
+        document.getElementById('formError').innerText = result.message;
+    }
+});
+    </script>
+</body>
+</html>
