@@ -5,4 +5,4 @@ Members:
         Marlo...,
         Alexa...
         
-Website Theme: Simply users can used this Watch Anime!
+Website Theme: Simply users can used this to Watch Anime!
