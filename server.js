@@ -83,13 +83,13 @@ app.post('/signup', async (req, res) => {
         lastLoginTime: null,
         accountLockedUntil: null // Initialize accountLockedUntil
     });
-    
+
     return res.json({ success: true, message: 'User registered successfully!' });
 });
 
 // Login route
 app.post('/login', loginLimiter, async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password } = req.body;   
 
     if (!email || !password) {
         return res.status(400).json({ success: false, message: 'Email and password are required.' });
@@ -156,7 +156,7 @@ app.post('/forgot-password', async (req, res) => {
     }
 
     const resetToken = Math.random().toString(36).substring(2, 15); // Generate a simple token
-    const resetUrl = `${process.env.BASE_URL}/reset-password.html`;
+    const resetUrl = `${process.env.BASE_URL || 'http://localhost:5000'}/reset-password.html`;
 
     // Store token temporarily in the database for validation
     await usersCollection.updateOne({ _id: user._id }, { $set: { resetToken: resetToken } });
@@ -222,6 +222,8 @@ app.post('/logout', (req, res) => {
 
 // Starting server
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
-    console.log(`Server is running on ${process.env.BASE_URL}/signup.html`);
+    const baseUrl = process.env.BASE_URL || `http://localhost:${PORT}`;  // Default to localhost if BASE_URL is not set
+    console.log(`Server is running on ${baseUrl}/signup.html`);
 });
