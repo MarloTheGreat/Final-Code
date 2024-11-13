@@ -233,8 +233,7 @@ document.getElementById('signupForm').addEventListener('submit', async (event) =
 
     const result = await response.json();
     if (result.success) {
-        const message = 'User Successfully Created!.';
-        formError.textContent = message;
+        alert('Account Created Successfully!');
         window.location.href = 'index.html'; // Redirect to login page after successful signup
     } else {
         // alert(result.message);  // Display any error messages returned by the server
