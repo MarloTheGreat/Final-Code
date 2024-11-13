@@ -304,6 +304,9 @@
 
     <div class="dashboard">
         <h1>AnimeVerse</h1>
+        <div class="welcome-message" id="welcomeMessage">
+            <!-- The welcome message will be inserted here -->
+        </div>
         <div class="genres">
             <button onclick="displayAll()">All</button>
             <button onclick="filterByGenre('Action')">Action</button>
@@ -346,6 +349,17 @@
             { title: "Re:Zero", genre: "Fantasy", description: "A boy is transported to a fantasy world, where he discovers his ability to 'Return by Death.'", episodes: 25, image: "images/rezero.jpg", image2: "images/rezero2.gif", image3: "images/rezero3.gif" },
             { title: "Parasyte", genre: "Horror", description: "A high school student battles parasitic beings controlling human hosts.", episodes: 24, image: "images/parasyte.jpg", image2: "images/parasyte2.gif", image3: "images/parasyte3.gif" }
         ];
+
+                // Check if the user is logged in by checking if the email is in localStorage
+                const userEmail = localStorage.getItem('userEmail');
+
+        if (userEmail) {
+            // Display the welcome message with the email
+            document.getElementById('welcomeMessage').textContent = `Welcome, ${userEmail}!`;
+        } else {
+            // If no email is found, redirect to login page
+            window.location.href = '/login.html';
+        }
 
         // Handle logout
         function handleLogout() {
