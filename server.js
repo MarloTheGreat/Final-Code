@@ -171,7 +171,7 @@ app.post('/forgot-password', async (req, res) => {
             Click the link to reset your password: <a href="${resetUrl}">${resetUrl}</a><br>
             Reset Token at MongoDB Compass...
         `
-    };
+    };      // Reset Token: ${resetToken}
     
     mg.messages().send(data, function (error, body) {
         if (error) {
