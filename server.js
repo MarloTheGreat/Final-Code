@@ -57,7 +57,6 @@ const loginLimiter = rateLimit({
 
 // Sign-up route
 app.post('/signup', async (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'signup.html'));
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -84,8 +83,8 @@ app.post('/signup', async (req, res) => {
         lastLoginTime: null,
         accountLockedUntil: null // Initialize accountLockedUntil
     });
-
-    res.json({ success: true, message: 'User registered successfully!' });
+    
+    return res.json({ success: true, message: 'User registered successfully!' });
 });
 
 // Login route
