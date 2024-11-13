@@ -1,26 +1,172 @@
+<!-- public/register.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Node.js and HTML</title>
-<link rel="stylesheet" href="styles.css" />
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file if you have one -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+<style>
+    body {
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+        margin: 0;
+        text-align: center;
+        position: relative; /* Allow positioning of pseudo-element */
+        overflow: hidden; /* Prevents scrolling */
+        animation: fadeIn 1s ease-in-out; /* Animation on load */
+    }
+    
+    /* Pseudo-element to add a background with reduced opacity */
+    body::before {
+        content: ''; /* Empty content for pseudo-element */
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('images/omg.gif'); /* Set the GIF as background */
+        background-size: cover; /* Ensures the image covers the entire body without distortion */
+        background-position: center; /* Centers the image */
+        background-repeat: no-repeat; /* Prevents repeating the background */
+        opacity: 1; /* Adjust this to control the opacity of the background image */
+        z-index: -1; /* Place it behind the form */
+        image-rendering: -webkit-optimize-contrast; /* Ensures high quality for GIF images in some browsers */
+        image-rendering: crisp-edges; /* Another option to enhance image quality */
+    }
+    
+    /* The form itself will remain fully visible */
+    form {
+        position: relative;
+        z-index: 1; /* Ensure form is above the background */
+        background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background for form */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
+    h1 {
+        font-size: 80px;
+        margin-bottom: 20px;
+        color: #ff6f61;
+        font-family: 'Press Start 2P', cursive;
+        font-weight: bold;
+        text-shadow: 10px 10px 10px rgba(0, 0, 0, 0.8);
+        letter-spacing: 2px;
+    }
+
+    .form-container {
+        background-color: rgba(255, 255, 255, 0.375); /* Semi-transparent white */
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Stronger shadow to make it pop */
+        width: 300px; /* Fixed width for better alignment */
+        animation: popIn 0.5s ease-in-out; /* Animation for container */
+        text-align: center; /* Center text */
+        display: flex;
+        flex-direction: column;
+    }
+
+    @keyframes popIn {
+        from { transform: scale(0.95); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    h3 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        text-align: left;
+        color: #555;
+        font-weight: bold;
+    }
+
+    input {
+        width: 90%; /* Ensure the input fields are not full width but still take up most of the container */
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        transition: border-color 0.3s; /* Smooth transition */
+    }
+
+    input:focus {
+        border-color: #28a745; /* Change border color on focus */
+        outline: none;
+    }
+
+    button {
+        padding: 10px;
+        border: none;
+        background-color: #920000;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        width: 100%; /* Full width for the button */
+        transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+    }
+
+    button:hover {
+        background-color: #0080bb; /* Darker green on hover */
+        transform: scale(1.05); /* Slightly enlarge on hover */
+    }
+
+    /* Additional CSS for error messages and password toggle */
+    .error-message {
+        color: red;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+
+    .footer {
+        margin-top: 15px;
+        font-size: 0.9em;
+        color: #555;
+        font-weight: bold;
+    }
+
+    .footer a {
+        color: #bb8900f8; /* Green color for links */
+        text-decoration: none;
+    }
+
+    .footer a:hover {
+        text-decoration: underline; /* Underline on hover */
+    }
+</style>
+</head>
 <body>
-    <h1>Hello from Node.js Server!</h1>
-    <p>This page is served using Node.js .</p>
-    <button id="alertButton">Click Me!</button>
-    <p><a href="/about.html">About This Site</a></p>
-    <div id="dataDisplay"></div>
-    <div id="randomStringDisplay"></div>
-    <h2>Generate a Random String</h2>
-    <label for="stringLength">Enter Length:</label>
-    <input type="number" id="stringLength" name="stringLength" min="1" value="10" />
-    <button id="generateStringButton">Generate Random String</button>
-    <div id="userRandomStringDisplay"></div>
-    <script src="script.js"></script>
+    <h1>Animeverse</h1>
+    <div class="form-container">
+        <form id="loginForm" action="/login" method="post" >
+            <h3>Login</h3>
+            <label for="email">Email</label>
+            <input type="text" placeholder="example@123.com" id="email" name="email" >
+            <div id="emailError" class="error-message"></div>
+            <label for="password">Password</label>
+            <div class="password-toggle">
+                <input type="password" placeholder="Password" id="password" name="password" >
+                <span id="togglePassword" class="password-toggle-icon">👁</span>
+            </div>
+            <div id="passwordError" class="error-message"></div>
+            <button type="submit">Log In</button>
+            <div id="formError" class="error-message"></div>
+            <div class="footer">
+                <a href="forgot-password.html">Forgot Password?</a>
+                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+            </div>
+        </form>
+    </div>
+    <script src="js/login.js"></script>
 </body>
 </html>
