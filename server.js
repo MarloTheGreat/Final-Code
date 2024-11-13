@@ -90,8 +90,8 @@ app.post('/signup', async (req, res) => {
 
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login.html'));
-  });
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+  });  
 
 // Login route
 app.post('/login', loginLimiter, async (req, res) => {
