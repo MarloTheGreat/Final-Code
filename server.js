@@ -56,7 +56,7 @@ const loginLimiter = rateLimit({
 });
 
 // Sign-up route
-app.get('/signup', async (req, res) => {
+app.post('/signup', async (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
     const { email, password } = req.body;
 
@@ -86,11 +86,6 @@ app.get('/signup', async (req, res) => {
     });
 
     res.json({ success: true, message: 'User registered successfully!' });
-});
-
-// Serve login.html on the root route
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 // Login route
