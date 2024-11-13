@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.use(helmet());
+app.set('trust proxy', 1);
 
 // Mailgun setup
 const mg = mailgun({
@@ -224,6 +225,14 @@ app.post('/logout', (req, res) => {
         res.json({ success: true, message: 'Logged out successfully.' });
     });
 });
+
+// Apply rate limiting middleware
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+  });
+
+app.use(limiter);
 
 // Starting server
 const PORT = process.env.PORT || 5000;
