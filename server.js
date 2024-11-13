@@ -87,6 +87,11 @@ app.post('/signup', async (req, res) => {
     return res.json({ success: true, message: 'User registered successfully!' });
 });
 
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login.html'));
+  });
+
 // Login route
 app.post('/login', loginLimiter, async (req, res) => {
     const { email, password } = req.body;   
@@ -169,7 +174,7 @@ app.post('/forgot-password', async (req, res) => {
         html: `
             You have requested to reset your password.<br>
             Click the link to reset your password: <a href="${resetUrl}">${resetUrl}</a><br>
-            Reset Token at MongoDB Compass...
+            Reset Token : ${resetToken}
         `
     };      // Reset Token: ${resetToken}
     
