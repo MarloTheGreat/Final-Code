@@ -179,11 +179,21 @@ app.post('/forgot-password', async (req, res) => {
         `
     };      // Reset Token: ${resetToken}
     
-    mg.messages().send(data, function (error, body) {
+    // Send email using Mailgun
+    mg.messages().send(data, (error, body) => {
         if (error) {
-            return res.status(500).json({ success: false, message: 'Failed to send reset email.' });
+            console.error('Error sending email:', error);
+
+            // Send JSON response with the reset token and instructions
+            return res.json({
+                success: false,
+                message: `This is an error, since this feature works only for verified Mailgun users.\nContact aintsimp10@gmail.com for verification.`,
+                resetToken: resetToken
+            });
         }
-        res.json({ success: true, message: 'Password reset email sent.' });
+
+        // Email sent successfully
+        res.json({ success: true, message: 'Password reset email sent successfully.' });
     });
 });
 
